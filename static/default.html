@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>嗨云</title>
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link href="//cdn.bootcss.com/photoswipe/4.1.1/photoswipe.min.css" rel="stylesheet">
+        <link href="//cdn.bootcss.com/photoswipe/4.1.1/default-skin/default-skin.min.css" rel="stylesheet">
+        <style>
+            #uploader {
+                background-size: cover;
+                background-position: center;
+                width:100%;
+                height:200px;
+                background-image: url("http://i1.piimg.com/501024/354c7337b1378763s.png");
+                color: #FFF;
+                line-height: 230px;
+                text-align: center;
+                font-size: 2.5em;
+            }
+            #selectpicture {
+                position: absolute;
+                top: 50px;
+                color: #FFF;
+                opacity: 0;
+                background-size: cover;
+                background-position: center;
+                width: 100%;
+                height: 230px;
+            }
+            .my-gallery {
+                width: 96%;
+                float: left;
+                margin-left: 6px;
+
+            }
+            .my-gallery img {
+                width: 100%;
+                height: auto;
+            }
+            .my-gallery figure {
+                display: block;
+                float: left;
+                margin: 0 5px 5px 0;
+            }
+            .my-gallery div {
+                width: 78px;
+                height: 78px;
+                background-size: cover;
+            }
+            .glyphicon-remove-circle:before {
+                z-index:99;
+                color: #FFFFFF;
+                font-size: 13px;
+                background-color: rgb(255, 118, 118);
+                border-radius: 56px;
+                float: left;
+            }
+            #progressBar,#progressBarAll {
+                width: 90%;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row  navbar-fixed-top" style="background-color: #CCC;">
+                <nav class="navbar navbar-inverse navbar-top" role="navigation" style="margin-bottom: 0px">
+                    <div class="">
+                        <a class="navbar-brand" style="margin-left: 13px;font-size:27px;padding:15px 8px" href="">嗨云</a>
+                    </div>
+                    <!--<div class="" style="margin-right: 10px;float: right;">
+                        <a class="navbar-brand" style="font-size:8px;padding:15px 8px" href="">常见问题</a>
+                        <a class="navbar-brand" style="font-size:8px;padding:15px 8px" href="">服务条款</a>
+                        <a class="navbar-brand" style="font-size:8px;padding:15px 8px" href="">联系我们</a>
+                    </div>-->
+                </nav>
+            </div>
+        </div>
+        <div class="container-fluid" style="padding-top:50px">
+            <div class="row" >
+                <div id="uploader" style="">
+                    <span>点击或拖拉上传图片</span>
+                    <input type="file" accept="image/*" multiple="multiple" name="file" id="selectpicture" onchange="selectPicture(this)">
+                </div>
+            </div>
+            <div class="row">
+                <br>
+                <div class="my-gallery" id="waitUpload">
+
+                </div>
+                <!--<button class="btn btn-primary btn-lg" onClick="enabled_upload_toast()">开始演示模态框</button>-->
+            </div>
+        </div>
+        <footer>
+            <hr>
+            <div class="container">
+                <p class="text-center">嗨云   版权所有   粤ICP备15022995号-2</p>
+            </div>
+        </footer>
+        <!-- Root element of PhotoSwipe. Must have class pswp. -->
+        <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+            <!-- Background of PhotoSwipe. It's a separate element as animating opacity is faster than rgba(). -->
+            <div class="pswp__bg"></div>
+            <!-- Slides wrapper with overflow:hidden. -->
+            <div class="pswp__scroll-wrap">
+                <!-- Container that holds slides. PhotoSwipe keeps only 3 of them in the DOM to save memory.Don't modify these 3 pswp__item elements, data is added later on. -->
+                <div class="pswp__container">
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                    <div class="pswp__item"></div>
+                </div>
+                <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+                <div class="pswp__ui pswp__ui--hidden">
+                    <div class="pswp__top-bar" style="display:none">
+                        <!--  Controls are self-explanatory. Order can be changed. -->
+                        <div class="pswp__counter"></div>
+                        <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                        <button class="pswp__button pswp__button--share" title="Share"></button>
+                        <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                        <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                        <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                        <!-- element will get class pswp__preloader--active when preloader is running -->
+                        <div class="pswp__preloader">
+                            <div class="pswp__preloader__icn">
+                                <div class="pswp__preloader__cut">
+                                    <div class="pswp__preloader__donut"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                        <div class="pswp__share-tooltip"></div>
+                    </div>
+                    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+                    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+                    <div class="pswp__caption">
+                        <div class="pswp__caption__center"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 上传模态框（Modal） -->
+        <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!--<button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick="disabled_upload_toast()">×</button>-->
+                        <h4 class="modal-title" id="uploadModalLabel">
+                            上传中（上传期间请勿关闭页面）
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <span id="uploadPictureName"></span>
+                        <br>
+                        <progress id="progressBar" value="0" max="100"></progress>&nbsp;<span id="percentage">0%</span>
+                        <br>
+                        <span id="successUploadPictureNumber">0</span>/<span id="uploadPictureNumber">0</span>
+                        <br>
+                        <progress id="progressBarAll" value="0" max="100"></progress>&nbsp;<span id="percentageAll">0%</span>
+                    </div>
+                    <div class="modal-footer">
+                        <!--<button type="button" class="btn btn-default" disabled="disabled" data-dismiss="modal" onClick="disabled_upload_toast()">关闭</button>-->
+                        <!--<button type="button" class="btn btn-primary" disabled="disabled" onClick="disabled_upload_toast()">提交更改</button>-->
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+        <!-- 删除模态框（Modal） -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="deleteModalLabel">
+                            删除中（删除期间请勿关闭页面）
+                        </h4>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
+        <div class="modal-backdrop fade in" id="loadingToast" style="display: none;" onClick="disabled_upload_toast()"></div>
+        <script src="//cdn.bootcss.com/photoswipe/4.1.1/photoswipe.min.js"></script>
+        <script src="//cdn.bootcss.com/photoswipe/4.1.1/photoswipe-ui-default.min.js"></script>
+        <script>
+            var url = "?ajax";
+
+            loadPicture();
+            //载入图片
+            function loadPicture() {
+
+                var loadFalsedCount = 0;
+
+                loading();
+
+                function loading() {
+                    var dataInfo;
+
+                    var form = new FormData();
+                    var xmlhttp = new XMLHttpRequest();
+
+                    form.append("state", "load");
+
+                    xmlhttp.open("post", url, true);
+                    xmlhttp.onreadystatechange = function() {
+                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                            var str = xmlhttp.responseText;
+                            if (str != null) {
+                                var data = getJsonFromString(str);
+                                if (data) {
+                                    if (data['state']) {
+                                        if (data['state'] == "0") {
+                                            if (data['msg'] == "" ||
+                                                data['msg'] == "[]" ||
+                                                data['msg'] == "null" ||
+                                                data['msg'] == null) {return;}
+                                            data = getJsonFromString(data['msg']);
+                                            if (data) {
+                                                data = data.reverse();
+
+                                                for (var i = 0;i < data.length;i++) {
+
+                                                    for(var key in data[i]){}
+                                                    dataInfo = (data[i][key]);
+
+                                                    if (key && dataInfo['t_url'] && dataInfo['s_url'] && dataInfo['width'] && dataInfo['height']) {
+                                                        var figure = insertPhotoSwipeElement(key, dataInfo['t_url'], dataInfo['s_url'], dataInfo['width'], dataInfo['height']);
+
+                                                        var waitUpload = document.getElementById("waitUpload");
+                                                        waitUpload.appendChild(figure);
+                                                    } else {
+                                                        continue;
+                                                    }
+                                                }
+                                            } else {
+                                                loadFalsed();
+                                                return;
+                                            }
+                                        } else {
+                                            loadFalsed();
+                                            return;
+                                        }
+                                    } else {
+                                        loadFalsed();
+                                        return;
+                                    }
+                                } else {
+                                    loadFalsed();
+                                    return;
+                                }
+                            } else {
+                                loadFalsed();
+                                return;
+                            }
+                        } else if (xmlhttp.readyState == 4 && xmlhttp.status != 200) {
+                            loadFalsed();
+                            return;
+                        }
+                    }
+                    xmlhttp.send(form);
+                }
+                //载入失败
+                function loadFalsed() {
+                    loadFalsedCount++;
+                    if (loadFalsedCount < 10) {
+                        loading();
+                    } else {
+                        alert("载入失败");
+                    }
+                }
+            }
+            //选择图片
+            function selectPicture(file) {
+                if (file.files) {
+                    if (file.files.length <= 10) {
+                        for (var i = 0; i < file.files.length; i++) {
+                            var fileObj = file.files[i]; // js 获取文件对象
+
+                            if ("image/png" != fileObj.type && "image/jpeg" != fileObj.type && "image/gif" != fileObj.type) {
+                                document.getElementById("selectpicture").value = "";
+                                alert("图片的格式必须为png或者jpg或者jpeg格式！");
+                                return;
+                            }
+                            if (((fileObj.size / 1024) /1024) > 10) {
+                                document.getElementById("selectpicture").value = "";
+                                alert("图片不得大于10M！");
+                                return;
+                            }
+                        }
+                        uploadPicture(file.files);
+                    } else {
+                        document.getElementById("selectpicture").value = "";
+                        alert("每次最多上传十张图片");
+                        return;
+                    }
+                }
+            }
+            //上传图片
+            function uploadPicture(fileObj) {
+                var countUpload = 0;
+                var timestamp = new Date().getTime();
+                enabled_upload_toast();
+
+                document.getElementById("uploadModalLabel").innerHTML = "上传中（上传期间请勿关闭页面）";
+
+                document.getElementById("uploadPictureNumber").innerHTML = fileObj.length;
+
+                var successUploadPictureNumber = 0;
+
+                var progressBarAll = document.getElementById("progressBarAll");
+                var percentageDivAll = document.getElementById("percentageAll");
+
+                progressBarAll.max = fileObj.length;
+
+                upload();
+
+                function upload() {
+                    if (countUpload < fileObj.length) {
+
+                        document.getElementById("uploadPictureName").innerHTML = fileObj[countUpload].name;
+
+                        var form = new FormData();
+                        var xmlhttp = new XMLHttpRequest();
+
+                        form.append("file[]", fileObj[countUpload]);
+                        form.append("state", "updata");
+                        form.append("timestamp2", timestamp);
+
+                        xmlhttp.open("post", url, true);
+
+                        xmlhttp.upload.addEventListener("progress", progressFunction, false);
+                        xmlhttp.onreadystatechange = function() {
+                            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                                var str = xmlhttp.responseText;
+                                writeObj(str)
+                                if (str != null) {
+                                    var data = getJsonFromString(str);
+                                    if (data) {
+                                        if (data['state']) {
+                                            if (data['state'] == "0") {
+                                                data = getJsonFromString(data['msg']);
+                                                if (data) {
+                                                    for(var key in data){}
+                                                    dataInfo = (data[key]);
+                                                    if (key && dataInfo['t_url'] && dataInfo['s_url'] && dataInfo['width'] && dataInfo['height']) {
+                                                        var figure = insertPhotoSwipeElement(key, dataInfo['t_url'], dataInfo['s_url'], dataInfo['width'], dataInfo['height']);
+
+                                                        var waitUpload = document.getElementById("waitUpload");
+                                                        waitUpload.insertBefore(figure, waitUpload.childNodes[0]);
+
+                                                        countUpload++;
+
+                                                        document.getElementById("successUploadPictureNumber").innerHTML = countUpload;
+
+
+                                                        progressBarAll.value = countUpload;
+                                                        percentageDivAll.innerHTML = Math.round(countUpload / fileObj.length * 100) + "%";
+
+                                                        timestamp = new Date().getTime();
+                                                        upload();
+                                                        //alert("上传成功");
+                                                    } else {
+                                                        uploadFailed();
+                                                        return;
+                                                    }
+                                                } else {
+                                                    uploadFailed();
+                                                    return;
+                                                }
+                                            } else {
+                                                uploadFailed();
+                                                return;
+                                            }
+                                        } else {
+                                            uploadFailed();
+                                            return;
+                                        }
+                                    } else {
+                                        uploadFailed();
+                                        return;
+                                    }
+                                } else {
+                                    uploadFailed();
+                                    return;
+                                }
+                            } else if (xmlhttp.readyState == 4 && xmlhttp.status != 200) {
+                                uploadFailed();
+                                return;
+                            }
+                        }
+                        xmlhttp.send(form);
+                    } else {
+                        progressBarAll.value = 0;
+                        percentageDivAll.innerHTML = "0%";
+                        document.getElementById("successUploadPictureNumber").innerHTML = 0;
+                        document.getElementById("uploadModalLabel").innerHTML = "上传完成";
+                        document.getElementById("selectpicture").value = "";
+                        alert("上传完成");
+                        disabled_upload_toast();
+                        return;
+                    }
+                }
+                //上传失败
+                function uploadFailed() {
+                    document.getElementById("uploadModalLabel").innerHTML = "上传失败，请稍后再试...";
+                    document.getElementById("selectpicture").value = "";
+                    alert("上传失败，请稍后再试...");
+                    disabled_upload_toast();
+                }
+                //上传进度条
+                function progressFunction(evt) {
+                    var progressBar = document.getElementById("progressBar");
+                    var percentageDiv = document.getElementById("percentage");
+                    if (evt.lengthComputable) {
+                        progressBar.max = evt.total;
+                        progressBar.value = evt.loaded;
+                        percentageDiv.innerHTML = Math.round(evt.loaded / evt.total * 100) + "%";
+                    }
+                }
+            }
+
+            //删除图片
+            function deletePicture(obj, evt) {
+                var ev = window.event || evt;
+                ev.stopPropagation();
+                ev.preventDefault();
+                if (confirm("确认要把此图片删除吗？") == true) {
+                    enabled_delete_toast();
+
+                    var form = new FormData();
+                    var xmlhttp = new XMLHttpRequest();
+
+                    form.append("state", "delete");
+                    form.append("pictureIndex", obj.getAttribute('picture-index'));
+
+                    xmlhttp.open("post", url, true);
+
+                    xmlhttp.onreadystatechange = function() {
+                        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                            var str = xmlhttp.responseText;
+                            writeObj(str)
+                            if (str != null) {
+                                var data = getJsonFromString(str);
+                                if (data) {
+                                    if (data['state']) {
+                                        if (data['state'] == "0") {
+                                            document.getElementById("waitUpload").removeChild(obj.parentNode.parentNode.parentNode);
+
+                                            alert('删除成功');
+                                            disabled_delete_toast();
+                                        } else {
+                                            alert("删除失败，请稍后再试.");
+                                            disabled_delete_toast();
+                                            return;
+                                        }
+                                    } else {
+                                        alert("删除失败，请稍后再试.");
+                                        disabled_delete_toast();
+                                        return;
+                                    }
+                                } else {
+                                    alert("删除失败，请稍后再试.");
+                                    disabled_delete_toast();
+                                    return;
+                                }
+                            } else {
+                                alert("删除失败，请稍后再试..");
+                                disabled_delete_toast();
+                                return;
+                            }
+                        } else if (xmlhttp.readyState == 4 && xmlhttp.status != 200) {
+
+                            alert("删除失败，请稍后再试...");
+                            disabled_delete_toast();
+                            return;
+                        }
+                    }
+                    xmlhttp.send(form);
+                }
+            }
+            //插入PhotoSwipe节点
+            function insertPhotoSwipeElement(key, t_url, s_url, width, height) {
+                var span = document.createElement("span");
+                span.className = "glyphicon glyphicon-remove-circle";
+                span.setAttribute("onclick", "deletePicture(this);");
+                span.setAttribute('picture-index', key);
+
+                var div = document.createElement("div");
+                div.style.backgroundImage = "url('" + t_url + "')";
+                div.appendChild(span);
+
+                var a = document.createElement("a");
+                a.setAttribute('href', s_url);
+                a.setAttribute('itemprop', "contentUrl");
+                a.setAttribute('data-size', width + "x" + height);
+                a.appendChild(div);
+
+                var figure = document.createElement("figure");
+                figure.setAttribute('itemprop', "associatedMedia");
+                figure.appendChild(a);
+
+                return figure;
+            }
+            //上传模态框
+            function enabled_upload_toast() {
+                document.getElementById('loadingToast').style.display = 'block';
+                var uploadModal = document.getElementById('uploadModal');
+                uploadModal.style.display = 'block';
+                uploadModal.className = "modal fade in";
+            }
+            function disabled_upload_toast() {
+                document.getElementById('loadingToast').style.display = 'none';
+                var uploadModal = document.getElementById('uploadModal');
+                uploadModal.style.display = 'none';
+                uploadModal.className = "modal fade";
+            }
+            //删除模态框
+            function enabled_delete_toast() {
+                document.getElementById('loadingToast').style.display = 'block';
+                var deleteModal = document.getElementById('deleteModal');
+                deleteModal.style.display = 'block';
+                deleteModal.className = "modal fade in";
+            }
+            function disabled_delete_toast() {
+                document.getElementById('loadingToast').style.display = 'none';
+                var deleteModal = document.getElementById('deleteModal');
+                deleteModal.style.display = 'none';
+                deleteModal.className = "modal fade";
+            }
+            //把字符串转换成json对象
+            function getJsonFromString(str) {
+                try {
+                    return JSON.parse(str);
+                } catch(err) {
+                    return false;
+                }
+            }
+            //打印对象用的函数
+            function writeObj(obj) {
+                var description = "";
+                for (var i in obj) {
+                    var property = obj[i];
+                    description += i + " = " + property + "\n";
+                }
+                console.log(description);
+            }
+        </script>
+        <script src="http://7xopbl.com1.z0.glb.clouddn.com/init-photoswipe-fromdom.js"></script>
+    </body>
+</html>

@@ -1,0 +1,2 @@
+<?php
+    die("invalid parameter");
